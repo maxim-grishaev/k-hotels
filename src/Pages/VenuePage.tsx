@@ -1,51 +1,50 @@
 import styled from "styled-components"
 import { Link } from "react-router-dom"
-import { Flex } from "antd"
+import { Alert, Flex } from "antd"
 import { Center, Subtitle } from "../Components/atoms"
 import { PageLayout } from "../Components/PageLayout"
 import { getAllPropertiesURL } from "../lib/nav"
 import { NotFoundPage } from "./NotFoundPage"
-import { useOneVenue } from "../hooks/useOneVenue"
+import { useOneProperty } from "../hooks/useOneProperty"
 import { PropertySection } from "../Components/PropertySection"
 import { ImgPreviewList } from "../Components/ImgPreview"
 import { PoliciesSection } from "../Components/PoliciesSection"
-import { Venue } from "../Store/venue/fetchData"
+import { Property } from "../Store/venue/fetchData"
 import { getPropertyAddress } from "../lib/getAddress"
 
 export const VenuePage = ({ id }: { id: string }) => {
-  const ven = useOneVenue(id)
-  if (ven === undefined) {
+  const prop = useOneProperty(id)
+  if (prop === undefined) {
     return <NotFoundPage>Property with id {id} is not found</NotFoundPage>
   }
-  return <PropertyPageUI venue={ven} />
+  return <PropertyPageUI property={prop} />
 }
 
-export const PropertyPageUI = ({ venue }: { venue: Venue }) => (
+export const PropertyPageUI = ({ property }: { property: Property }) => (
   <PageLayout>
     <Center>
       <BackLink to={getAllPropertiesURL()}>&larr; Back to properties</BackLink>
       <h1>
-        {venue.property.name}
-        <Subtitle>{getPropertyAddress(venue.property)}</Subtitle>
+        {property.name}
+        <Subtitle>{getPropertyAddress(property)}</Subtitle>
       </h1>
 
       <Flex gap="30px">
         <MainCol>
           <ImgWrap>
-            <ImgPreviewList images={venue.property.images} />
+            {property.images.length > 0 ? (
+              <ImgPreviewList images={property.images} />
+            ) : (
+              <Alert type="info" message="No images yet..." />
+            )}
           </ImgWrap>
 
           <h2>Policies</h2>
-          <PoliciesSection
-            propertyId={venue.property.id}
-            cancellationPolicies={venue.policies.cancellationPolicies}
-            noShowPolicies={venue.policies.noShowPolicies}
-            currency={venue.property.currency}
-          />
+          <PoliciesSection propertyId={property.id} />
         </MainCol>
 
         <SideCol>
-          <PropertySection property={venue.property} />
+          <PropertySection property={property} />
         </SideCol>
       </Flex>
     </Center>

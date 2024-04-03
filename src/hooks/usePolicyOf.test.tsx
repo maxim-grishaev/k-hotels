@@ -3,14 +3,11 @@ import { createTestStoreProvider } from "../Store/createTestStoreProvider"
 import { createStore } from "../Store/store"
 import { populateVenue } from "../Store/venue/mock"
 import {
-  selectOneCancellationPolicy,
-  selectOneNoSHowPolicy,
+  selectOnePolicyOfCancellation,
+  selectOnePolicyOfNoShow,
 } from "../Store/venue/selectors"
 import { venueSlice } from "../Store/venue/venueSlice"
-import {
-  useUpdatePolicyOfCancellation,
-  useUpdatePolicyOfNoShow,
-} from "./useUpdatePolicyOf"
+import { usePolicyOfCancellation, usePolicyOfNoShow } from "./usePolicyOf"
 
 describe("should update policy", () => {
   let store = createStore()
@@ -32,20 +29,23 @@ describe("should update policy", () => {
   it("usePolicyNoSHowCallback", async () => {
     const view = renderHook(
       () =>
-        useUpdatePolicyOfNoShow({
+        usePolicyOfNoShow({
           propertyId,
           policyId: policyNoShowId,
         }),
       { wrapper: createTestStoreProvider(store) },
     )
 
-    expect(view.result.current).toEqual(expect.any(Function))
-
-    act(() => {
-      view.result.current({ amount: 42 })
+    expect(view.result.current).toEqual({
+      policy: expect.any(Object),
+      update: expect.any(Function),
     })
 
-    const nsp = selectOneNoSHowPolicy(
+    act(() => {
+      view.result.current.update({ amount: 42 })
+    })
+
+    const nsp = selectOnePolicyOfNoShow(
       store.getState().venues,
       propertyId,
       policyNoShowId,
@@ -56,20 +56,23 @@ describe("should update policy", () => {
   it("usePolicyCancellationCallback", async () => {
     const view = renderHook(
       () =>
-        useUpdatePolicyOfCancellation({
+        usePolicyOfCancellation({
           propertyId,
           policyId: policyCancellationId,
         }),
       { wrapper: createTestStoreProvider(store) },
     )
 
-    expect(view.result.current).toEqual(expect.any(Function))
-
-    act(() => {
-      view.result.current({ amount: 1337, days: 2 })
+    expect(view.result.current).toEqual({
+      policy: expect.any(Object),
+      update: expect.any(Function),
     })
 
-    const cp = selectOneCancellationPolicy(
+    act(() => {
+      view.result.current.update({ amount: 1337, days: 2 })
+    })
+
+    const cp = selectOnePolicyOfCancellation(
       store.getState().venues,
       propertyId,
       policyCancellationId,

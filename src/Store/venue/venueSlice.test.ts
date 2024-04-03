@@ -1,3 +1,4 @@
+import { venueAdapter } from "./venueAdapter"
 import { Venue } from "./fetchData"
 import {
   createPolicyCancellation,
@@ -5,7 +6,7 @@ import {
   createVenue,
 } from "./mock"
 import { selectOneVenue } from "./selectors"
-import { venueAdapter, venueSlice } from "./venueSlice"
+import { venueSlice } from "./venueSlice"
 
 describe("venueSlice", () => {
   it("should create an action to request properties", () => {

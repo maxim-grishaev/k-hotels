@@ -1,13 +1,7 @@
-import {
-  PayloadAction,
-  createSlice,
-  createEntityAdapter,
-} from "@reduxjs/toolkit"
+import { PayloadAction, createSlice } from "@reduxjs/toolkit"
+import { venueAdapter } from "./venueAdapter"
 import { PolicyOfCancellation, PolicyOfNoShow, Venue } from "./fetchData"
-
-export const venueAdapter = createEntityAdapter({
-  selectId: (item: Venue) => item.property.id,
-})
+import { pickOnePolicyOfCancellation, pickOnePolicyOfNoShow } from "./selectors"
 
 const initState = {
   loading: true,
@@ -37,21 +31,19 @@ export const venueSlice = createSlice({
       action: PayloadAction<{
         propertyId: string
         policyId: string
-        data: Omit<Partial<PolicyOfNoShow>, "id">
+        data: Partial<PolicyOfNoShow>
       }>,
     ) => {
       const { data, policyId, propertyId } = action.payload
+      if (data.id !== undefined && data.id !== policyId) {
+        console.error("[updateNoSHowPolicy] id is not allowed to be changed")
+        return
+      }
       const venue = state.venues.entities[propertyId]
-      if (!venue) {
-        return
+      const policy = pickOnePolicyOfNoShow(venue, policyId)
+      if (policy) {
+        Object.assign(policy, data)
       }
-      const policy = venue.policies.noShowPolicies.find(
-        (p) => p.id === policyId,
-      )
-      if (!policy) {
-        return
-      }
-      Object.assign(policy, data)
     },
 
     updateCancellationPolicy: (
@@ -59,21 +51,36 @@ export const venueSlice = createSlice({
       action: PayloadAction<{
         propertyId: string
         policyId: string
-        data: Omit<Partial<PolicyOfCancellation>, "id">
+        data: Partial<PolicyOfCancellation>
       }>,
     ) => {
       const { policyId, propertyId, data } = action.payload
       const venue = state.venues.entities[propertyId]
+      const policy = pickOnePolicyOfCancellation(venue, policyId)
+      if (policy) {
+        Object.assign(policy, data)
+      }
+    },
+    setPolicyValue: (
+      state,
+      action: PayloadAction<{
+        propertyId: string
+        policyId: string
+        amount: number
+      }>,
+    ) => {
+      const { amount, policyId, propertyId } = action.payload
+      const venue = state.venues.entities[propertyId]
       if (!venue) {
         return
       }
-      const policy = venue.policies.cancellationPolicies.find(
-        (p) => p.id === policyId,
-      )
+      const policy = venue.policies.noShowPolicies
+        .concat(venue.policies.cancellationPolicies)
+        .find((p) => p.id === policyId)
       if (!policy) {
         return
       }
-      Object.assign(policy, data)
+      policy.amount = amount
     },
   },
 })

@@ -3,11 +3,11 @@ import { createTestStoreProvider } from "../Store/createTestStoreProvider"
 import { createStore } from "../Store/store"
 import { populateVenue } from "../Store/venue/mock"
 import { venueSlice } from "../Store/venue/venueSlice"
-import { useOneVenue } from "./useOneVenue"
+import { useOneProperty } from "./useOneProperty"
 
 describe("useOneVenue", () => {
   it("should return undefined if item does not exist", () => {
-    const view = renderHook(() => useOneVenue("1"), {
+    const view = renderHook(() => useOneProperty("1"), {
       wrapper: createTestStoreProvider(),
     })
     expect(view.result.current).toBeUndefined()
@@ -28,9 +28,9 @@ describe("useOneVenue", () => {
     v2.property.name = "found me!"
     store.dispatch(venueSlice.actions.success([v1, v2]))
 
-    const view = renderHook(() => useOneVenue("p-good"), {
+    const view = renderHook(() => useOneProperty("p-good"), {
       wrapper: createTestStoreProvider(store),
     })
-    expect(view.result.current?.property.name).toEqual("found me!")
+    expect(view.result.current?.name).toEqual("found me!")
   })
 })

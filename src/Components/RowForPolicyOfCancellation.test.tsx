@@ -2,15 +2,59 @@ import "@testing-library/jest-dom/extend-expect"
 import { act, fireEvent, render, screen } from "@testing-library/react"
 import { createTestStoreProvider } from "../Store/createTestStoreProvider"
 import { createStore } from "../Store/store"
-import { createPolicyCancellation } from "../Store/venue/mock"
+import { createPolicyCancellation, populateVenue } from "../Store/venue/mock"
 import { venueSlice } from "../Store/venue/venueSlice"
-import { RowForPolicyOfCancellation } from "./RowForPolicyOfCancellation"
+import {
+  RowForPolicyOfCancellation,
+  RowForPolicyOfCancellationUI,
+} from "./RowForPolicyOfCancellation"
 
 describe("RowForPolicyOfCancellation", () => {
   it("should render", () => {
+    const store = createStore()
+
+    const ven = populateVenue({
+      propertyId: "p1",
+      policyCancellationId: "c1",
+    })
+    store.dispatch(venueSlice.actions.success([ven]))
+
+    render(
+      <RowForPolicyOfCancellation
+        propertyId="p1"
+        policyId="c1"
+        currency="USD"
+      />,
+      { wrapper: createTestStoreProvider() },
+    )
+  })
+
+  it("should bail out if there is no policy", () => {
+    const store = createStore()
+
+    render(
+      <RowForPolicyOfCancellation
+        propertyId="p1"
+        policyId="c1"
+        currency="USD"
+      />,
+      { wrapper: createTestStoreProvider(store) },
+    )
+    expect(
+      screen.getByText("Policy with id c1 is not found"),
+    ).toBeInTheDocument()
+  })
+})
+
+describe("RowForPolicyOfCancellationUI", () => {
+  it("should render", () => {
     const pol = createPolicyCancellation("1")
     render(
-      <RowForPolicyOfCancellation propertyId="1" policy={pol} currency="USD" />,
+      <RowForPolicyOfCancellationUI
+        policy={pol}
+        currency="USD"
+        onSave={jest.fn()}
+      />,
       { wrapper: createTestStoreProvider() },
     )
     expect(screen.getByText(pol.name)).toBeInTheDocument()
@@ -21,10 +65,10 @@ describe("RowForPolicyOfCancellation", () => {
 
   it("should render edit", () => {
     render(
-      <RowForPolicyOfCancellation
-        propertyId="1"
+      <RowForPolicyOfCancellationUI
         policy={createPolicyCancellation("1")}
         currency="USD"
+        onSave={jest.fn()}
       />,
       { wrapper: createTestStoreProvider() },
     )
@@ -50,16 +94,15 @@ describe("RowForPolicyOfCancellation", () => {
   })
 
   it("should call the save handler", () => {
-    const store = createStore()
-    const spyDispatch = jest.spyOn(store, "dispatch")
+    const mockSave = jest.fn()
 
     render(
-      <RowForPolicyOfCancellation
-        propertyId="1"
+      <RowForPolicyOfCancellationUI
         policy={createPolicyCancellation("1")}
         currency="USD"
+        onSave={mockSave}
       />,
-      { wrapper: createTestStoreProvider(store) },
+      { wrapper: createTestStoreProvider() },
     )
     const btnEdit = screen.getByRole("button", { name: "Edit" })
     act(() => {
@@ -75,27 +118,21 @@ describe("RowForPolicyOfCancellation", () => {
       btnSave.click()
     })
 
-    expect(spyDispatch).toHaveBeenCalledTimes(1)
-    expect(spyDispatch).toHaveBeenCalledWith(
-      venueSlice.actions.updateCancellationPolicy({
-        propertyId: "1",
-        policyId: "1",
-        data: expect.objectContaining({ days: 7, hours: 12 }),
-      }),
+    expect(mockSave).toHaveBeenCalledTimes(1)
+    expect(mockSave).toHaveBeenCalledWith(
+      expect.objectContaining({ days: 7, hours: 12 }),
     )
   })
 
   it("should call the reset handler", () => {
-    const store = createStore()
-    const spyDispatch = jest.spyOn(store, "dispatch")
-
+    const mockSave = jest.fn()
     render(
-      <RowForPolicyOfCancellation
-        propertyId="1"
+      <RowForPolicyOfCancellationUI
         policy={createPolicyCancellation("1")}
         currency="USD"
+        onSave={mockSave}
       />,
-      { wrapper: createTestStoreProvider(store) },
+      { wrapper: createTestStoreProvider() },
     )
     const btnEdit = screen.getByRole("button", { name: "Edit" })
     act(() => {
@@ -109,6 +146,6 @@ describe("RowForPolicyOfCancellation", () => {
       btnRst.click()
     })
 
-    expect(spyDispatch).toHaveBeenCalledTimes(0)
+    expect(mockSave).toHaveBeenCalledTimes(0)
   })
 })
