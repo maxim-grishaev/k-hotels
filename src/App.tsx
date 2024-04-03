@@ -1,17 +1,15 @@
-import React from "react"
-import "./App.css"
-import Layout from "antd/es/layout"
-import { Content } from "antd/es/layout/layout"
-import MainRouter from "./Router/mainRouter"
+import { Provider } from "react-redux"
+import { MainRouter } from "./Router/MainRouter"
+import { createStore } from "./Store/store"
+import { StrictMode } from "react"
+import "./index.css"
 
-function App() {
+export function App() {
   return (
-    <Layout className="layout" style={{ minHeight: "100vh" }}>
-      <Content>
+    <StrictMode>
+      <Provider store={createStore()}>
         <MainRouter />
-      </Content>
-    </Layout>
+      </Provider>
+    </StrictMode>
   )
 }
-
-export default App
