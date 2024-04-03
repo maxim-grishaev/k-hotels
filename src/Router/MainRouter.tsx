@@ -17,7 +17,7 @@ export const OnePropertyRoute = () => {
 
 export const MainRouter = () => {
   usePropsFetcher()
-  const isLoading = useSelector((state: RootState) => state.property.loading)
+  const isLoading = useSelector((state: RootState) => state.venues.loading)
   return (
     <BrowserRouter>
       <Routes>

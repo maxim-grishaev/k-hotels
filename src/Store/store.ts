@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit" // ...
 import createSagaMiddleware from "redux-saga"
-import { reducer as propertyReducer } from "./property/reducer"
+import { venueSlice } from "./venue/venueSlice"
 import { rootSaga } from "./saga"
 
 const sagaMiddleware = createSagaMiddleware()
@@ -9,7 +9,7 @@ export const createStore = () => {
   const store = configureStore({
     middleware: [sagaMiddleware],
     reducer: {
-      property: propertyReducer,
+      venues: venueSlice.reducer,
     },
   })
   sagaMiddleware.run(rootSaga)

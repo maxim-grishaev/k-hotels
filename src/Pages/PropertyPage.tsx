@@ -1,93 +1,225 @@
 import styled from "styled-components"
 import { Center } from "../Components/Center"
-import { DataProperty } from "../Store/property/service"
+import { VenuePolicies, VenueProperty } from "../Store/venue/fetchData"
 import { PageLayout } from "../Components/PageLayout"
-import { Image } from "antd"
+import { Flex, Image, Progress } from "antd"
 import { getAllPropertiesURL } from "../lib/nav"
 import { Link } from "react-router-dom"
 import { NotFoundPage } from "./NotFoundPage"
-import { useOneProperty } from "../hooks/useProperty"
+import { useOneVenue } from "../hooks/useOneVenue"
 
 export const PropertyPage = ({ id }: { id: string }) => {
-  const property = useOneProperty(id)
-  if (property === undefined) {
+  const ven = useOneVenue(id)
+  if (ven === undefined) {
     return <NotFoundPage>Property with id {id} is not found</NotFoundPage>
   }
-  return <PropertyPageUI property={property} />
+  return <PropertyPageUI property={ven.property} policies={ven.policies} />
 }
 
 const IMG_HEIGHT = 100
-export const PropertyPageUI = ({ property }: { property: DataProperty }) => (
+export const PropertyPageUI = ({
+  property,
+  policies,
+}: {
+  property: VenueProperty
+  policies: VenuePolicies
+}) => (
   <PageLayout>
-    <Center>
+    <Center style={{ width: "60%" }}>
       <BackLink to={getAllPropertiesURL()}>&larr; Back to properties</BackLink>
-      <h3>{property.name}</h3>
+      <PageTitle>
+        {property.name}
+        <Gray>
+          {property.addressLine1}, {property.postcode} {property.city},{" "}
+          {property.country}
+        </Gray>
+      </PageTitle>
 
-      <h4>Images: {property.images.length}</h4>
-      <ImgWrap>
-        {property.images.map((img) => (
-          <Image
-            key={img.id}
-            src={img.url}
-            alt={`id ${img.id}`}
-            height={IMG_HEIGHT}
-            width={img.width * (IMG_HEIGHT / img.height)}
-          />
-        ))}
-      </ImgWrap>
+      <Flex gap="30px">
+        <MainCol>
+          <h4>Images: {property.images.length}</h4>
+          <Flex gap="5px" justify="flex-start" wrap="wrap">
+            {property.images.map((img) => (
+              <Image
+                key={img.id}
+                src={img.url}
+                alt={`id ${img.id}`}
+                height={IMG_HEIGHT}
+                width={img.width * (IMG_HEIGHT / img.height)}
+              />
+            ))}
+          </Flex>
+          <h4>No show policies</h4>
+          <BubbleBlock>
+            {policies.noShowPolicies.map((it) => (
+              <PolicyRow
+                key={it.id}
+                name={it.name}
+                description={it.description}
+                amount={it.amount}
+                chargeType={
+                  it.chargeType === "percentage" ? "%" : property.currency
+                }
+              />
+            ))}
+          </BubbleBlock>
 
-      <Col>
-        <BubbleBlock>
-          <Row label="ID">{property.id}</Row>
-          <Row label="Name">{property.name}</Row>
-          <Row label="Star Rating">{property.starRating}</Row>
-        </BubbleBlock>
+          <h4>Cancellation policies</h4>
+          <BubbleBlock>
+            {policies.cancellationPolicies.map((it) => (
+              <PolicyRow
+                key={it.id}
+                name={it.name}
+                description={it.description}
+                amount={it.amount}
+                chargeType={
+                  it.chargeType === "percentage" ? "%" : property.currency
+                }
+              />
+            ))}
+          </BubbleBlock>
+        </MainCol>
 
-        <BubbleBlock>
-          <Title>Adress</Title>
-          <Row label="City">{property.city}</Row>
-          <Row label="Country">{property.country}</Row>
-          <Row label="Street">{property.addressLine1}</Row>
-        </BubbleBlock>
-      </Col>
+        <SideCol>
+          <h4>Property info</h4>
+          <BubbleBlock>
+            <Row label="ID">{property.id}</Row>
+            <Row label="Star Rating">
+              <Progress
+                showInfo={false}
+                percent={(property.starRating / 5) * 100}
+                steps={5}
+                strokeLinecap="butt"
+              />
+            </Row>
+            <Row label="Rooms">{property.rooms}</Row>
+            <Row label="Check-in time">{property.checkInTime}</Row>
+            <Row label="Check-out time">{property.checkOutTime}</Row>
+            <Row label="Currency">{property.currency}</Row>
+            <Row label="Status">{property.status ? "On" : "Off"}</Row>
+            <Row label="Time zone">{property.timezone}</Row>
+          </BubbleBlock>
+
+          <h4>Contacts</h4>
+          <BubbleBlock>
+            <Row label="Phone:">
+              {!property.phoneNumber ? (
+                <Gray>N/A</Gray>
+              ) : (
+                <a href={`tel:${property.phoneNumber}`}>
+                  {property.phoneNumber ?? "N/A"}
+                </a>
+              )}
+            </Row>
+            <Row label="Domain">
+              {!property.domain ? (
+                <Gray>N/A</Gray>
+              ) : (
+                <a
+                  href={`https://${property.domain}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {property.domain}
+                </a>
+              )}
+            </Row>
+            <Row label="Email:">
+              {!property.email ? (
+                <Gray>N/A</Gray>
+              ) : (
+                <a href={`mailto:${property.email}`}>{property.email}</a>
+              )}
+            </Row>
+          </BubbleBlock>
+        </SideCol>
+      </Flex>
     </Center>
   </PageLayout>
 )
 
+const Gray = styled.span`
+  color: #888;
+`
+
+const PageTitle = styled.h1`
+  margin: 10px 0;
+  font-weight: 300;
+  font-size: 36px;
+  ${Gray} {
+    display: block;
+    color: #888;
+    font-size: 14px;
+    font-style: normal;
+  }
+`
+
+const PolicyRow = (props: {
+  name: string
+  description: string
+  amount: number
+  chargeType: string
+}) => (
+  <RowEven>
+    <span>
+      {props.description}
+      <Gray>{props.name}</Gray>
+    </span>
+    <span>
+      {props.amount}
+      {props.chargeType}
+    </span>
+  </RowEven>
+)
+
+const Label = styled.span`
+  font-weight: 500;
+  color: #999;
+  margin-right: 1ex;
+`
+
+const Value = styled.span`
+  color: #111;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`
+
 const Row = (props: { label: string; children: React.ReactNode }) => (
   <RowEven>
-    <span>{props.label}</span>
-    <span>{props.children}</span>
+    <Label>{props.label}</Label>
+    <Value>{props.children}</Value>
   </RowEven>
 )
 
 const BackLink = styled(Link)`
   float: right;
+  margin-top: 1em;
   margin-left: 1em;
-`
-
-const ImgWrap = styled.span`
-  display: flex;
-  & > * {
-    margin-right: 5px;
-  }
-`
-
-const Title = styled.strong`
-  margin: 11px 0;
 `
 
 const Col = styled.div`
   display: flex;
-  width: 100%;
   flex-direction: column;
+`
+
+const SideCol = styled(Col)`
+  width: 250px;
+`
+
+const MainCol = styled(Col)`
+  flex: 1;
 `
 
 const RowEven = styled.div`
   display: flex;
-  justify-content: space-around;
   justify-content: space-between;
   margin: 13px 0;
+  ${Gray} {
+    display: block;
+    color: #333;
+    font-size: 80%;
+    font-style: normal;
+  }
 `
 
 const BubbleBlock = styled.div`

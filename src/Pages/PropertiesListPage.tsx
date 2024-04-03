@@ -1,8 +1,8 @@
 import { PropertiesTable } from "../Components/PropertiesTable"
 import { Center } from "../Components/Center"
 import { PageLayout } from "../Components/PageLayout"
-import { DataProperty } from "../Store/property/service"
-import { useAllProperties } from "../hooks/useProperty"
+import { VenueProperty } from "../Store/venue/fetchData"
+import { useAllProperties } from "../hooks/useAllProperties"
 
 export const PropertiesListPage = () => (
   <PropertiesListPageUI properties={useAllProperties()} />
@@ -11,7 +11,7 @@ export const PropertiesListPage = () => (
 export const PropertiesListPageUI = ({
   properties,
 }: {
-  properties: DataProperty[]
+  properties: VenueProperty[]
 }) => (
   <PageLayout isHome>
     <Center>

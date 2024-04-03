@@ -1,5 +1,5 @@
 import { Button, Image, Table } from "antd"
-import { DataProperty } from "../Store/property/service"
+import { VenueProperty } from "../Store/venue/fetchData"
 import Column from "antd/es/table/Column"
 import { Link } from "react-router-dom"
 import { getPropertyURL } from "../lib/nav"
@@ -7,7 +7,7 @@ import { getPropertyURL } from "../lib/nav"
 export const PropertiesTable = ({
   properties,
 }: {
-  properties: DataProperty[]
+  properties: VenueProperty[]
 }) => (
   <Table
     dataSource={properties.map((p) => ({
@@ -25,7 +25,7 @@ export const PropertiesTable = ({
   </Table>
 )
 
-const NameCell = ({ item }: { item: DataProperty }) => (
+const NameCell = ({ item }: { item: VenueProperty }) => (
   <Link to={getPropertyURL(item.id)}>{item.name}</Link>
 )
 
@@ -33,7 +33,7 @@ const ImgCell = ({
   image,
   alt,
 }: {
-  image?: DataProperty["images"][number]
+  image?: VenueProperty["images"][number]
   alt: string
 }) =>
   image !== undefined ? <Image src={image.url} width={100} alt={alt} /> : null
