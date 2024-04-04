@@ -25,5 +25,26 @@ export const venueSlice = createSlice({
       state.loading = false
       state.error = String(action.payload)
     },
+    setPolicyValue: (
+      state,
+      action: PayloadAction<{
+        propertyId: string
+        policyId: string
+        amount: number
+      }>,
+    ) => {
+      const { amount, policyId, propertyId } = action.payload
+      const venue = state.venues.entities[propertyId]
+      if (!venue) {
+        return
+      }
+      const policy = venue.policies.noShowPolicies
+        .concat(venue.policies.cancellationPolicies)
+        .find((p) => p.id === policyId)
+      if (!policy) {
+        return
+      }
+      policy.amount = amount
+    },
   },
 })

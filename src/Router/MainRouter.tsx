@@ -4,20 +4,13 @@ import { useSelector } from "react-redux"
 import { RootState } from "../Store/store"
 import { LoadingPage } from "../Pages/LoadingPage"
 import { NotFoundPage } from "../Pages/NotFoundPage"
-import { PropertiesListPage } from "../Pages/PropertiesListPage"
-import { PropertyPage } from "../Pages/PropertyPage"
+import { VenuesListPage } from "../Pages/VenuesListPage"
+import { VenuePage } from "../Pages/VenuePage"
 
-export const OnePropertyRoute = () => {
-  let { id } = useParams()
-  if (id === undefined) {
-    return <NotFoundPage>Unknown property id: {String(id)}</NotFoundPage>
-  }
-  return <PropertyPage id={id} />
-}
-
+const getLoadingState = (state: RootState) => state.venues.loading
 export const MainRouter = () => {
   usePropsFetcher()
-  const isLoading = useSelector((state: RootState) => state.venues.loading)
+  const isLoading = useSelector(getLoadingState)
   return (
     <BrowserRouter>
       <Routes>
@@ -27,10 +20,20 @@ export const MainRouter = () => {
         />
         <Route
           path="/"
-          element={isLoading ? <LoadingPage /> : <PropertiesListPage />}
+          element={isLoading ? <LoadingPage /> : <AllPropertiesRoute />}
         />
         <Route path="*" element={<NotFoundPage>Path not found</NotFoundPage>} />
       </Routes>
     </BrowserRouter>
   )
+}
+
+export const AllPropertiesRoute = () => <VenuesListPage />
+
+export const OnePropertyRoute = () => {
+  let { id } = useParams()
+  if (id === undefined) {
+    return <NotFoundPage>Unknown property id: {String(id)}</NotFoundPage>
+  }
+  return <VenuePage id={id} />
 }

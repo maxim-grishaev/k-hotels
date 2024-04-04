@@ -1,10 +1,11 @@
 import { Menu } from "antd"
 import { useNavigate } from "react-router-dom"
+import { getAllPropertiesURL } from "../lib/nav"
 
 export const Navbar = (props: { isHome: boolean }) => {
   const navigate = useNavigate()
   const onClick = () => {
-    navigate("/")
+    navigate(getAllPropertiesURL())
   }
   return (
     <Menu

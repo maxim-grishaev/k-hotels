@@ -1,11 +1,12 @@
-import { Center } from "../Components/Center"
+import { Skeleton } from "antd"
+import { Center } from "../Components/atoms"
 import { PageLayout } from "../Components/PageLayout"
 
-export const LoadingPage = (props: { children?: React.ReactNode }) => (
+export const LoadingPage = () => (
   <PageLayout isHome>
     <Center>
-      <h3>Loading...</h3>
-      <p>{props.children}</p>
+      <h1>Loading...</h1>
+      <Skeleton />
     </Center>
   </PageLayout>
 )
