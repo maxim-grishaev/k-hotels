@@ -1,23 +1,22 @@
 import { Layout } from "antd"
 import { Navbar } from "./Navbar"
-import { Content, Footer } from "antd/es/layout/layout"
 import styled, { keyframes } from "styled-components"
 
 export const PageLayout = ({
+  disableHomeLink: isHome,
   children,
-  isHome,
 }: {
-  isHome?: boolean
+  disableHomeLink?: boolean
   children: React.ReactNode
 }) => (
   <Layout className="layout" style={{ minHeight: "100vh" }}>
-    <Content>
-      <Navbar isHome={isHome ?? false} />
+    <Layout.Content>
+      <Navbar disableHomeLink={isHome ?? false} />
       {children}
-    </Content>
-    <Footer>
+    </Layout.Content>
+    <Layout.Footer>
       <Hey>👋</Hey>
-    </Footer>
+    </Layout.Footer>
   </Layout>
 )
 

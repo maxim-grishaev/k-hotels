@@ -9,6 +9,12 @@ export const createStore = () => {
   const store = configureStore({
     middleware: [sagaMiddleware],
     reducer: {
+      // For testing
+      // history: createReducer([] as AnyAction[], (builder) =>
+      //   builder.addDefaultCase((state, action: AnyAction) =>
+      //     state.concat(action),
+      //   ),
+      // ),
       venues: venueSlice.reducer,
     },
   })

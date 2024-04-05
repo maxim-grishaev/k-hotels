@@ -1,7 +1,7 @@
 import { PropertiesTable } from "../Components/PropertiesTable"
 import { Center, Gray } from "../Components/atoms"
 import { PageLayout } from "../Components/PageLayout"
-import { Venue } from "../Store/venue/fetchData"
+import { Property } from "../Store/venue/fetchData"
 import { useAllProperties } from "../hooks/useAllProperties"
 
 export const VenuesListPage = () => (
@@ -11,9 +11,9 @@ export const VenuesListPage = () => (
 export const VenuesListPageUI = ({
   properties,
 }: {
-  properties: Venue["property"][]
+  properties: Property[]
 }) => (
-  <PageLayout isHome>
+  <PageLayout disableHomeLink>
     <Center>
       <h1>
         Properties <Gray>&middot; {properties.length}</Gray>

@@ -1,42 +1,46 @@
 import { styled } from "styled-components"
 import { ASectionWithTitle } from "./ASectionWithTitile"
-import { Venue } from "../Store/venue/fetchData"
-import { PolicyRowCancellation } from "./PolicyRowCancellation"
-import { PolicyRowNoShow } from "./PolicyRowNoSHow"
+import { PolicyOfCancellation, PolicyOfNoShow } from "../Store/venue/fetchData"
+import { RowForPolicyOfCancellation } from "./RowForPolicyOfCancellation"
+import { RowForPolicyOfNoShow } from "./RowForPolicyOfNoShow"
 
 export const PoliciesSection = ({
   propertyId,
-  policies,
   currency,
+  noShowPolicies,
+  cancellationPolicies,
 }: {
   propertyId: string
-  policies: Venue["policies"]
+  noShowPolicies: PolicyOfNoShow[]
+  cancellationPolicies: PolicyOfCancellation[]
   currency: string
 }) => {
   return (
     <>
       <ASectionWithTitle title="No show">
-        {policies.noShowPolicies.map((it) => (
+        {noShowPolicies.map((it) => (
           <Item key={it.id}>
-            <PolicyRowNoShow
+            <RowForPolicyOfNoShow
               propertyId={propertyId}
               policy={it}
               currency={currency}
             />
           </Item>
         ))}
+        {noShowPolicies.length === 0 && <p>None</p>}
       </ASectionWithTitle>
 
       <ASectionWithTitle title="Cancellation">
-        {policies.cancellationPolicies.map((it) => (
+        {cancellationPolicies.map((it) => (
           <Item key={it.id}>
-            <PolicyRowCancellation
+            <RowForPolicyOfCancellation
               propertyId={propertyId}
               policy={it}
               currency={currency}
             />
           </Item>
         ))}
+        {cancellationPolicies.length === 0 && <p>None</p>}
       </ASectionWithTitle>
     </>
   )

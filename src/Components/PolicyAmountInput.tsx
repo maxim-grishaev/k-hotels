@@ -1,17 +1,23 @@
-import { PolicyCancellation, PolicyNoShow } from "../Store/venue/fetchData"
-import { AmountInput, PercenrtageInput } from "./Input"
+import { PolicyOfCancellation, PolicyOfNoShow } from "../Store/venue/fetchData"
+import { AmountInput } from "./AmountInput"
 
-export const PolicyAmountInput = ({
-  policy,
-  currency,
-  onChange,
-}: {
-  policy: PolicyNoShow | PolicyCancellation
+export const PolicyAmountInput = (props: {
+  policy: PolicyOfNoShow | PolicyOfCancellation
+  name: string
   currency: string
   onChange: (v: number) => void
 }) =>
-  policy.chargeType === "percentage" ? (
-    <PercenrtageInput value={policy.amount} onChange={onChange} />
+  props.policy.chargeType === "percentage" ? (
+    <AmountInput.Percents
+      name={props.name}
+      value={props.policy.amount}
+      onChange={props.onChange}
+    />
   ) : (
-    <AmountInput value={policy.amount} onChange={onChange} suffix={currency} />
+    <AmountInput
+      name={props.name}
+      value={props.policy.amount}
+      onChange={props.onChange}
+      suffix={props.currency}
+    />
   )

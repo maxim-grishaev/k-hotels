@@ -1,22 +1,22 @@
 import { useCallback, useState } from "react"
-import { PolicyCancellation } from "../Store/venue/fetchData"
-import { usePolicyCancellationCallback } from "./usePolicyUpdateCallback"
+import { PolicyOfCancellation } from "../Store/venue/fetchData"
+import { useUpdatePolicyOfCancellation } from "./useUpdatePolicyOf"
 
 export const usePolicyEditor = ({
   propertyId,
   policy,
 }: {
   propertyId: string
-  policy: PolicyCancellation
+  policy: PolicyOfCancellation
 }) => {
-  const savePolicy = usePolicyCancellationCallback({
+  const savePolicy = useUpdatePolicyOfCancellation({
     propertyId,
     policyId: policy.id,
   })
   const [isEditing, setEditing] = useState(false)
   const [editedPolicy, setEditedPolicy] = useState({ ...policy })
 
-  const onChange = useCallback((newValues: Partial<PolicyCancellation>) => {
+  const onChange = useCallback((newValues: Partial<PolicyOfCancellation>) => {
     setEditedPolicy((editedPolicy) => {
       return { ...editedPolicy, ...newValues }
     })

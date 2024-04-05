@@ -1,6 +1,13 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit"
-import { PolicyCancellation, PolicyNoShow, Venue } from "./fetchData"
-import { venueAdapter } from "./venueAdapter"
+import {
+  PayloadAction,
+  createSlice,
+  createEntityAdapter,
+} from "@reduxjs/toolkit"
+import { PolicyOfCancellation, PolicyOfNoShow, Venue } from "./fetchData"
+
+export const venueAdapter = createEntityAdapter({
+  selectId: (item: Venue) => item.property.id,
+})
 
 const initState = {
   loading: true,
@@ -22,15 +29,15 @@ export const venueSlice = createSlice({
       state.loading = false
     },
     error: (state, action) => {
-      state.loading = false
       state.error = String(action.payload)
+      state.loading = false
     },
     updateNoSHowPolicy: (
       state,
       action: PayloadAction<{
         propertyId: string
         policyId: string
-        data: Omit<Partial<PolicyNoShow>, "id">
+        data: Omit<Partial<PolicyOfNoShow>, "id">
       }>,
     ) => {
       const { data, policyId, propertyId } = action.payload
@@ -52,7 +59,7 @@ export const venueSlice = createSlice({
       action: PayloadAction<{
         propertyId: string
         policyId: string
-        data: Omit<Partial<PolicyCancellation>, "id">
+        data: Omit<Partial<PolicyOfCancellation>, "id">
       }>,
     ) => {
       const { policyId, propertyId, data } = action.payload

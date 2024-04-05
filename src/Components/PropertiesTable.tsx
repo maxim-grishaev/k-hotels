@@ -1,17 +1,12 @@
 import { Button, Table } from "antd"
-import { Venue } from "../Store/venue/fetchData"
-import Column from "antd/es/table/Column"
+import { Property } from "../Store/venue/fetchData"
 import { Link } from "react-router-dom"
 import { getPropertyURL } from "../lib/nav"
 import { ImgPreviewItem } from "./ImgPreview"
 import { getPropertyAddress } from "../lib/getAddress"
 import { Gray } from "./atoms"
 
-export const PropertiesTable = ({
-  properties,
-}: {
-  properties: Venue["property"][]
-}) => (
+export const PropertiesTable = ({ properties }: { properties: Property[] }) => (
   <Table
     dataSource={properties.map((p) => ({
       id: p.id,
@@ -22,20 +17,20 @@ export const PropertiesTable = ({
     }))}
     rowKey="id"
   >
-    <Column dataIndex="image" title="" key="image" width={120} />
-    <Column dataIndex="name" title="Name" key="name" />
-    <Column dataIndex="address" title="Address" key="address" />
-    <Column dataIndex="id" title="ID" key="id" width={1} />
-    <Column dataIndex="action" title="" key="actions" width={1} />
+    <Table.Column dataIndex="image" title="" key="image" width={120} />
+    <Table.Column dataIndex="name" title="Name" key="name" />
+    <Table.Column dataIndex="address" title="Address" key="address" />
+    <Table.Column dataIndex="id" title="ID" key="id" width={1} />
+    <Table.Column dataIndex="action" title="" key="actions" width={1} />
   </Table>
 )
 
-const ImgCell = ({ item }: { item: Venue["property"] }) =>
+const ImgCell = ({ item }: { item: Property }) =>
   item.images.length > 0 ? (
     <ImgPreviewItem image={item.images[0]} alt={item.name} />
   ) : null
 
-const NameCell = ({ item }: { item: Venue["property"] }) => (
+const NameCell = ({ item }: { item: Property }) => (
   <p>
     <Link to={getPropertyURL(item.id)}>{item.name}</Link>
     <br />

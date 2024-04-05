@@ -1,14 +1,10 @@
 import styled from "styled-components"
 import { Progress } from "antd"
 import { Gray } from "./atoms"
-import { Venue } from "../Store/venue/fetchData"
+import { Property } from "../Store/venue/fetchData"
 import { ASectionWithTitle } from "./ASectionWithTitile"
 
-export const PropertySidebar = ({
-  property,
-}: {
-  property: Venue["property"]
-}) => (
+export const PropertySection = ({ property }: { property: Property }) => (
   <>
     <ASectionWithTitle title="Property">
       <Row label="ID">{property.id}</Row>

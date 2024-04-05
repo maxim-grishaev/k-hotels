@@ -1,22 +1,27 @@
-import { PolicyCancellation, PolicyNoShow, Venue, Property } from "./fetchData"
+import {
+  PolicyOfCancellation,
+  PolicyOfNoShow,
+  Venue,
+  Property,
+} from "./fetchData"
 
 export const createProperty = (id: string): Property => ({
   id,
-  name: "property",
-  addressLine1: "address",
-  city: "city",
-  country: "country",
-  checkInTime: "checkInTime",
-  checkOutTime: "checkOutTime",
-  description: "description",
+  name: `property ${id}`,
+  addressLine1: `addressLine1 ${id}`,
+  city: `city ${id}`,
+  country: `country ${id}`,
+  checkInTime: `checkInTime ${id}`,
+  checkOutTime: `checkOutTime ${id}`,
+  description: `description ${id}`,
   images: [],
-  phoneNumber: "phone",
-  currency: "currency",
-  timezone: "timezone",
-  domain: "domain",
-  email: "email",
+  phoneNumber: `phoneNumber ${id}`,
+  currency: `currency ${id}`,
+  timezone: `timezone ${id}`,
+  domain: `domain ${id}`,
+  email: `email ${id}`,
   isAvailableForPartnerships: false,
-  postcode: "postcode",
+  postcode: `postcode ${id}`,
   rooms: 2,
   starRating: 3,
   status: false,
@@ -32,21 +37,39 @@ export const createVenue = (id: string): Venue => ({
   policies: createPolicies(),
 })
 
-export const createPolicyNoSHow = (id: string): PolicyNoShow => ({
+export const createPolicyNoShow = (id: string): PolicyOfNoShow => ({
   amount: 0,
   chargeType: "percentage",
-  description: "description",
-  name: "name",
+  description: `description ${id}`,
+  name: `name ${id}`,
   id,
 })
 
-export const createPolicyCancellation = (id: string): PolicyCancellation => ({
+export const createPolicyCancellation = (id: string): PolicyOfCancellation => ({
   id,
   amount: 0,
   chargeType: "percentage",
   reference: "prior-to-arrival",
   days: 1,
   hours: 1,
-  name: "name",
-  description: "description",
+  name: `name ${id}`,
+  description: `description ${id}`,
 })
+
+export const populateVenue = (
+  ids: {
+    propertyId?: string
+    policyNoShowId?: string
+    policyCancellationId?: string
+  } = {},
+) => {
+  const ven = createVenue(ids.propertyId ?? "1")
+
+  const polN = createPolicyNoShow(ids.policyNoShowId ?? "2")
+  ven.policies.noShowPolicies.push(polN)
+
+  const polC = createPolicyCancellation(ids.policyCancellationId ?? "3")
+  ven.policies.cancellationPolicies.push(polC)
+
+  return ven
+}

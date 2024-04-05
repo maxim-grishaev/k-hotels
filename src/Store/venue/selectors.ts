@@ -1,5 +1,4 @@
-import { venueAdapter } from "./venueAdapter"
-import { VenueState } from "./venueSlice"
+import { venueAdapter, VenueState } from "./venueSlice"
 
 const selectAdapterBranch = (state: VenueState) => state.venues
 
@@ -9,13 +8,31 @@ export const selectAllProperties =
 export const selectOneVenue =
   venueAdapter.getSelectors(selectAdapterBranch).selectById
 
-export const selectOneProperty = (state: VenueState, propertyId?: string) => {
-  if (propertyId === undefined) {
-    return undefined
-  }
+export const selectOneProperty = (state: VenueState, propertyId: string) => {
+  const venue = selectOneVenue(state, propertyId)
+  return venue ? venue.property : undefined
+}
+
+export const selectOneNoSHowPolicy = (
+  state: VenueState,
+  propertyId: string,
+  policyId: string,
+) => {
   const venue = selectOneVenue(state, propertyId)
   if (venue === undefined) {
     return undefined
   }
-  return venue.property
+  return venue.policies.noShowPolicies.find((p) => p.id === policyId)
+}
+
+export const selectOneCancellationPolicy = (
+  state: VenueState,
+  propertyId: string,
+  policyId: string,
+) => {
+  const venue = selectOneVenue(state, propertyId)
+  if (venue === undefined) {
+    return undefined
+  }
+  return venue.policies.cancellationPolicies.find((p) => p.id === policyId)
 }

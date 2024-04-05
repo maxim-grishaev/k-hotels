@@ -1,12 +1,11 @@
 import { Venue } from "./fetchData"
 import {
   createPolicyCancellation,
-  createPolicyNoSHow,
+  createPolicyNoShow,
   createVenue,
 } from "./mock"
 import { selectOneVenue } from "./selectors"
-import { venueAdapter } from "./venueAdapter"
-import { venueSlice } from "./venueSlice"
+import { venueAdapter, venueSlice } from "./venueSlice"
 
 describe("venueSlice", () => {
   it("should create an action to request properties", () => {
@@ -40,7 +39,7 @@ describe("venueSlice", () => {
   it("should set the policy value", () => {
     let venState = venueAdapter.getInitialState()
     const ven: Venue = createVenue("1")
-    ven.policies.noShowPolicies.push(createPolicyNoSHow("1"))
+    ven.policies.noShowPolicies.push(createPolicyNoShow("1"))
     ven.policies.cancellationPolicies.push(createPolicyCancellation("1"))
     const state = venueSlice.reducer(
       {

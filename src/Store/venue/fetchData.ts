@@ -17,8 +17,8 @@ type WithOverriden<T, U = unknown> = {
 
 export type ImgData = WithOverriden<SrcImg>
 export type Property = WithOverriden<SrcProp, { images: ImgData[] }>
-export type PolicyNoShow = WithOverriden<SrcPolNo>
-export type PolicyCancellation = WithOverriden<
+export type PolicyOfNoShow = WithOverriden<SrcPolNo>
+export type PolicyOfCancellation = WithOverriden<
   SrcPolCncl,
   { reference: Reference }
 >
@@ -26,8 +26,8 @@ export type PolicyCancellation = WithOverriden<
 export type Venue = {
   property: Property
   policies: {
-    noShowPolicies: PolicyNoShow[]
-    cancellationPolicies: PolicyCancellation[]
+    noShowPolicies: PolicyOfNoShow[]
+    cancellationPolicies: PolicyOfCancellation[]
   }
 }
 

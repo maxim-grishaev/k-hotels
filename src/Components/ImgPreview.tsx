@@ -1,6 +1,6 @@
 import { Flex, Image } from "antd"
 
-type ImageData = {
+export type ImageData = {
   id: string
   url: string
   width: number

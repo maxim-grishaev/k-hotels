@@ -1,20 +1,20 @@
 import { Flex } from "antd"
 import { styled } from "styled-components"
-import { usePolicyNoSHowCallback } from "../hooks/usePolicyUpdateCallback"
-import { PolicyNoShow } from "../Store/venue/fetchData"
+import { useUpdatePolicyOfNoShow } from "../hooks/useUpdatePolicyOf"
+import { PolicyOfNoShow } from "../Store/venue/fetchData"
 import { Gray } from "./atoms"
 import { PolicyAmountInput } from "./PolicyAmountInput"
 
-export const PolicyRowNoShow = ({
+export const RowForPolicyOfNoShow = ({
   propertyId,
   policy,
   currency,
 }: {
   propertyId: string
-  policy: PolicyNoShow
+  policy: PolicyOfNoShow
   currency: string
 }) => {
-  const onPolicyChange = usePolicyNoSHowCallback({
+  const onPolicyChange = useUpdatePolicyOfNoShow({
     propertyId,
     policyId: policy.id,
   })
@@ -26,6 +26,7 @@ export const PolicyRowNoShow = ({
       </Flex>
       <PolicyVal>
         <PolicyAmountInput
+          name="Cost"
           policy={policy}
           onChange={(v) => onPolicyChange({ amount: v })}
           currency={currency}

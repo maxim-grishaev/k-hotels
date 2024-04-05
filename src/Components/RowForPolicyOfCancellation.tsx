@@ -1,19 +1,19 @@
-import { Button, Flex, Select } from "antd"
+import { Button, Flex, Select, Tag } from "antd"
 import { styled } from "styled-components"
 import { usePolicyEditor } from "../hooks/usePolicyEditor"
 import { refL10nMap } from "../lib/l10n"
-import { PolicyCancellation, Reference } from "../Store/venue/fetchData"
+import { PolicyOfCancellation, Reference } from "../Store/venue/fetchData"
 import { Gray } from "./atoms"
-import { AmountInput } from "./Input"
+import { AmountInput } from "./AmountInput"
 import { PolicyAmountInput } from "./PolicyAmountInput"
 
-export const PolicyRowCancellation = ({
+export const RowForPolicyOfCancellation = ({
   propertyId,
   policy,
   currency,
 }: {
   propertyId: string
-  policy: PolicyCancellation
+  policy: PolicyOfCancellation
   currency: string
 }) => {
   const pe = usePolicyEditor({ propertyId, policy })
@@ -23,10 +23,10 @@ export const PolicyRowCancellation = ({
       description={policy.description}
       actions={
         <>
-          <Button onClick={pe.reset} type="link">
+          <Button aria-label="Reset" onClick={pe.reset} type="link">
             Reset
           </Button>
-          <Button onClick={pe.save} type="primary">
+          <Button aria-label="Save" onClick={pe.save} type="primary">
             Save
           </Button>
         </>
@@ -46,39 +46,39 @@ export const PolicyRowCancellation = ({
       name={policy.name}
       description={policy.description}
       actions={
-        <Button onClick={pe.edit} type="text">
+        <Button aria-label="Edit" onClick={pe.edit} type="text">
           Edit
         </Button>
       }
     >
-      <PolicyCancellationViewUI policy={policy} currency={currency} />
+      <RowForPolicyOfCancellationViewUI policy={policy} currency={currency} />
     </PolicyRow>
   )
 }
 
-export const PolicyCancellationViewUI = ({
+export const RowForPolicyOfCancellationViewUI = ({
   policy,
   currency,
 }: {
-  policy: PolicyCancellation
+  policy: PolicyOfCancellation
   currency: string
 }) => (
   <View>
-    <strong>
+    <Tag>
       {policy.amount} {policy.chargeType === "percentage" ? "%" : currency}
-    </strong>{" "}
+    </Tag>
     if cancelled{" "}
     {policy.days > 0 ? (
       <>
-        <strong>{policy.days}</strong> days
+        <Tag>{policy.days}</Tag>days
       </>
     ) : null}{" "}
     {policy.hours > 0 ? (
       <>
-        <strong>{policy.hours}</strong> hours
+        <Tag>{policy.hours}</Tag>hours
       </>
     ) : null}{" "}
-    <strong>{refL10nMap[policy.reference]}</strong>
+    <Tag>{refL10nMap[policy.reference]}</Tag>
   </View>
 )
 
@@ -90,7 +90,7 @@ export const PolicyRowCancellationEditUI = ({
   onChangeHours,
   onChangeRef,
 }: {
-  policy: PolicyCancellation
+  policy: PolicyOfCancellation
   currency: string
   onChangeAmount: (v: number) => void
   onChangeDays: (v: number) => void
@@ -100,6 +100,7 @@ export const PolicyRowCancellationEditUI = ({
   <Flex gap="1ex" align="baseline" justify="start" wrap="wrap">
     <PolicyVal>
       <PolicyAmountInput
+        name="Cost"
         policy={policy}
         onChange={onChangeAmount}
         currency={currency}
@@ -107,11 +108,17 @@ export const PolicyRowCancellationEditUI = ({
     </PolicyVal>
 
     <TimeVal>
-      <AmountInput value={policy.days} onChange={onChangeDays} suffix="days" />
+      <AmountInput
+        name="Days"
+        value={policy.days}
+        onChange={onChangeDays}
+        suffix="days"
+      />
     </TimeVal>
 
     <TimeVal>
       <AmountInput
+        name="Hours"
         value={policy.hours}
         max={23}
         onChange={onChangeHours}
@@ -119,7 +126,11 @@ export const PolicyRowCancellationEditUI = ({
       />
     </TimeVal>
 
-    <Select value={policy.reference} onChange={onChangeRef}>
+    <Select
+      aria-label="Reference"
+      value={policy.reference}
+      onChange={onChangeRef}
+    >
       <Select.Option value="prior-to-arrival">
         {refL10nMap["prior-to-arrival"]}
       </Select.Option>

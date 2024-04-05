@@ -6,7 +6,7 @@ import { PageLayout } from "../Components/PageLayout"
 import { getAllPropertiesURL } from "../lib/nav"
 import { NotFoundPage } from "./NotFoundPage"
 import { useOneVenue } from "../hooks/useOneVenue"
-import { PropertySidebar } from "../Components/PropertySection"
+import { PropertySection } from "../Components/PropertySection"
 import { ImgPreviewList } from "../Components/ImgPreview"
 import { PoliciesSection } from "../Components/PoliciesSection"
 import { Venue } from "../Store/venue/fetchData"
@@ -38,13 +38,14 @@ export const PropertyPageUI = ({ venue }: { venue: Venue }) => (
           <h2>Policies</h2>
           <PoliciesSection
             propertyId={venue.property.id}
-            policies={venue.policies}
+            cancellationPolicies={venue.policies.cancellationPolicies}
+            noShowPolicies={venue.policies.noShowPolicies}
             currency={venue.property.currency}
           />
         </MainCol>
 
         <SideCol>
-          <PropertySidebar property={venue.property} />
+          <PropertySection property={venue.property} />
         </SideCol>
       </Flex>
     </Center>

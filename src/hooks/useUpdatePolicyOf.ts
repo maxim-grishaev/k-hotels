@@ -1,9 +1,9 @@
 import { useCallback } from "react"
 import { useDispatch } from "react-redux"
-import { PolicyCancellation, PolicyNoShow } from "../Store/venue/fetchData"
+import { PolicyOfCancellation, PolicyOfNoShow } from "../Store/venue/fetchData"
 import { venueSlice } from "../Store/venue/venueSlice"
 
-export const usePolicyCancellationCallback = ({
+export const useUpdatePolicyOfCancellation = ({
   propertyId,
   policyId,
 }: {
@@ -13,7 +13,7 @@ export const usePolicyCancellationCallback = ({
   const dispatch = useDispatch()
 
   return useCallback(
-    (data: Partial<Omit<PolicyCancellation, "id">>) => {
+    (data: Partial<Omit<PolicyOfCancellation, "id">>) => {
       dispatch(
         venueSlice.actions.updateCancellationPolicy({
           propertyId,
@@ -26,7 +26,7 @@ export const usePolicyCancellationCallback = ({
   )
 }
 
-export const usePolicyNoSHowCallback = ({
+export const useUpdatePolicyOfNoShow = ({
   propertyId,
   policyId,
 }: {
@@ -36,7 +36,7 @@ export const usePolicyNoSHowCallback = ({
   const dispatch = useDispatch()
 
   return useCallback(
-    (data: Partial<Omit<PolicyNoShow, "id">>) => {
+    (data: Partial<Omit<PolicyOfNoShow, "id">>) => {
       dispatch(
         venueSlice.actions.updateNoSHowPolicy({ propertyId, policyId, data }),
       )
