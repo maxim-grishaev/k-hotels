@@ -1,81 +1,59 @@
 import styled from "styled-components"
+import { Link } from "react-router-dom"
+import { Flex } from "antd"
 import { Center, Subtitle } from "../Components/atoms"
 import { PageLayout } from "../Components/PageLayout"
-import { Flex } from "antd"
 import { getAllPropertiesURL } from "../lib/nav"
-import { Link } from "react-router-dom"
 import { NotFoundPage } from "./NotFoundPage"
 import { useOneVenue } from "../hooks/useOneVenue"
-import { PropertySidebar } from "./PropertySidebar"
-import { ImgPreviewList } from "./ImgPreview"
-import { PoliciesSection } from "./PoliciesSection"
-import { Gray } from "../Components/atoms"
-import { VenuePoliciesDict, VenuePropertyInfo } from "../Store/venue/fetchData"
-import { useDispatch } from "react-redux"
-import { venueSlice } from "../Store/venue/venueSlice"
+import { PropertySidebar } from "../Components/PropertySection"
+import { ImgPreviewList } from "../Components/ImgPreview"
+import { PoliciesSection } from "../Components/PoliciesSection"
+import { Venue } from "../Store/venue/fetchData"
 import { getPropertyAddress } from "../lib/getAddress"
 
 export const VenuePage = ({ id }: { id: string }) => {
   const ven = useOneVenue(id)
-  const dispatch = useDispatch()
   if (ven === undefined) {
     return <NotFoundPage>Property with id {id} is not found</NotFoundPage>
   }
-  return (
-    <PropertyPageUI
-      property={ven.property}
-      policies={ven.policies}
-      onPolicyChange={(policyId, value) => {
-        dispatch(
-          venueSlice.actions.setPolicyValue({
-            propertyId: ven.property.id,
-            policyId: policyId,
-            amount: value,
-          }),
-        )
-      }}
-    />
-  )
+  return <PropertyPageUI venue={ven} />
 }
 
-export const PropertyPageUI = ({
-  property,
-  policies,
-  onPolicyChange,
-}: {
-  property: VenuePropertyInfo
-  policies: VenuePoliciesDict
-  onPolicyChange: (policyId: string, value: number) => void
-}) => (
+export const PropertyPageUI = ({ venue }: { venue: Venue }) => (
   <PageLayout>
     <Center>
       <BackLink to={getAllPropertiesURL()}>&larr; Back to properties</BackLink>
       <h1>
-        {property.name}
-        <Subtitle>{getPropertyAddress(property)}</Subtitle>
+        {venue.property.name}
+        <Subtitle>{getPropertyAddress(venue.property)}</Subtitle>
       </h1>
 
-      <Flex gap="50px">
+      <Flex gap="30px">
         <MainCol>
-          <h3>
-            Images <Gray>&middot; {property.images.length}</Gray>
-          </h3>
-          <ImgPreviewList images={property.images} />
+          <ImgWrap>
+            <ImgPreviewList images={venue.property.images} />
+          </ImgWrap>
 
+          <h2>Policies</h2>
           <PoliciesSection
-            policies={policies}
-            currency={property.currency}
-            onPolicyChange={onPolicyChange}
+            propertyId={venue.property.id}
+            policies={venue.policies}
+            currency={venue.property.currency}
           />
         </MainCol>
 
         <SideCol>
-          <PropertySidebar property={property} />
+          <PropertySidebar property={venue.property} />
         </SideCol>
       </Flex>
     </Center>
   </PageLayout>
 )
+
+const ImgWrap = styled.div`
+  margin-top: 20px;
+`
 
 const BackLink = styled(Link)`
   float: right;

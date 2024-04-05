@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-weight: 300;
 }
 
 code {
@@ -16,4 +17,14 @@ h1 {
   margin: 20px 0 10px;
   font-weight: 300;
   font-size: 36px;
+}
+
+strong {
+  font-weight: 500;
+}
+
+a:focus-visible {
+  outline: 3px solid #91caff;
+  outline-offset: 3px;
+  border-radius: 2px;
 }

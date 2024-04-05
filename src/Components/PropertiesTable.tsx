@@ -1,16 +1,16 @@
 import { Button, Table } from "antd"
-import { VenuePropertyInfo } from "../Store/venue/fetchData"
+import { Venue } from "../Store/venue/fetchData"
 import Column from "antd/es/table/Column"
 import { Link } from "react-router-dom"
 import { getPropertyURL } from "../lib/nav"
-import { ImgPreviewItem } from "../Pages/ImgPreview"
+import { ImgPreviewItem } from "./ImgPreview"
 import { getPropertyAddress } from "../lib/getAddress"
 import { Gray } from "./atoms"
 
 export const PropertiesTable = ({
   properties,
 }: {
-  properties: VenuePropertyInfo[]
+  properties: Venue["property"][]
 }) => (
   <Table
     dataSource={properties.map((p) => ({
@@ -30,12 +30,12 @@ export const PropertiesTable = ({
   </Table>
 )
 
-const ImgCell = ({ item }: { item: VenuePropertyInfo }) =>
+const ImgCell = ({ item }: { item: Venue["property"] }) =>
   item.images.length > 0 ? (
     <ImgPreviewItem image={item.images[0]} alt={item.name} />
   ) : null
 
-const NameCell = ({ item }: { item: VenuePropertyInfo }) => (
+const NameCell = ({ item }: { item: Venue["property"] }) => (
   <p>
     <Link to={getPropertyURL(item.id)}>{item.name}</Link>
     <br />

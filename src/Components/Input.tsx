@@ -17,12 +17,15 @@ export const PercenrtageInput = (props: {
 export const AmountInput = (props: {
   value: number
   onChange: (val: number) => void
-  suffix: string
+  min?: number
+  max?: number
+  suffix?: string
 }) => (
   <Input
     type="number"
     value={props.value}
-    min={0}
+    min={props.min ?? 0}
+    max={props.max}
     onChange={(e) => props.onChange(Number(e.target.value))}
     suffix={props.suffix}
   />

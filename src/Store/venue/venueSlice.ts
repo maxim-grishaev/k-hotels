@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
-import { Venue } from "./fetchData"
+import { PolicyCancellation, PolicyNoShow, Venue } from "./fetchData"
 import { venueAdapter } from "./venueAdapter"
 
 const initState = {
@@ -25,26 +25,48 @@ export const venueSlice = createSlice({
       state.loading = false
       state.error = String(action.payload)
     },
-    setPolicyValue: (
+    updateNoSHowPolicy: (
       state,
       action: PayloadAction<{
         propertyId: string
         policyId: string
-        amount: number
+        data: Omit<Partial<PolicyNoShow>, "id">
       }>,
     ) => {
-      const { amount, policyId, propertyId } = action.payload
+      const { data, policyId, propertyId } = action.payload
       const venue = state.venues.entities[propertyId]
       if (!venue) {
         return
       }
-      const policy = venue.policies.noShowPolicies
-        .concat(venue.policies.cancellationPolicies)
-        .find((p) => p.id === policyId)
+      const policy = venue.policies.noShowPolicies.find(
+        (p) => p.id === policyId,
+      )
       if (!policy) {
         return
       }
-      policy.amount = amount
+      Object.assign(policy, data)
+    },
+
+    updateCancellationPolicy: (
+      state,
+      action: PayloadAction<{
+        propertyId: string
+        policyId: string
+        data: Omit<Partial<PolicyCancellation>, "id">
+      }>,
+    ) => {
+      const { policyId, propertyId, data } = action.payload
+      const venue = state.venues.entities[propertyId]
+      if (!venue) {
+        return
+      }
+      const policy = venue.policies.cancellationPolicies.find(
+        (p) => p.id === policyId,
+      )
+      if (!policy) {
+        return
+      }
+      Object.assign(policy, data)
     },
   },
 })

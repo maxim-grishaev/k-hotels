@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes, useParams } from "react-router-dom"
-import { usePropsFetcher } from "../hooks/usePropsFetcher"
+import { useVenuesFetcher } from "../hooks/useVenuesFetcher"
 import { useSelector } from "react-redux"
 import { RootState } from "../Store/store"
 import { LoadingPage } from "../Pages/LoadingPage"
@@ -9,7 +9,7 @@ import { VenuePage } from "../Pages/VenuePage"
 
 const getLoadingState = (state: RootState) => state.venues.loading
 export const MainRouter = () => {
-  usePropsFetcher()
+  useVenuesFetcher()
   const isLoading = useSelector(getLoadingState)
   return (
     <BrowserRouter>

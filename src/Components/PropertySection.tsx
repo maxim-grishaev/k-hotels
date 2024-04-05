@@ -1,13 +1,13 @@
 import styled from "styled-components"
 import { Progress } from "antd"
-import { Gray } from "../Components/atoms"
-import { VenuePropertyInfo } from "../Store/venue/fetchData"
-import { ASectionWithTitle } from "../Components/ASectionWithTitile"
+import { Gray } from "./atoms"
+import { Venue } from "../Store/venue/fetchData"
+import { ASectionWithTitle } from "./ASectionWithTitile"
 
 export const PropertySidebar = ({
   property,
 }: {
-  property: VenuePropertyInfo
+  property: Venue["property"]
 }) => (
   <>
     <ASectionWithTitle title="Property">
@@ -58,21 +58,15 @@ export const PropertySidebar = ({
   </>
 )
 
-const Label = styled.span`
-  font-weight: 300;
-  color: #333;
-  margin-right: 1ex;
-`
-
 const Value = styled.span`
-  color: #111;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-left: 1ex;
 `
 
 const Row = (props: { label: string; children: React.ReactNode }) => (
   <RowEven>
-    <Label>{props.label}</Label>
+    <Gray>{props.label}</Gray>
     <Value>{!props.children ? <Gray>N/A</Gray> : props.children}</Value>
   </RowEven>
 )
@@ -81,10 +75,4 @@ const RowEven = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 13px 0;
-  ${Gray} {
-    display: block;
-    color: #333;
-    font-size: 80%;
-    font-style: normal;
-  }
 `
