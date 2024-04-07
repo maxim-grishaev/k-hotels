@@ -3,42 +3,33 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@reduxjs/toolkit": "^1.9.3",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^13.0.0",
-    "@testing-library/user-event": "^13.2.1",
-    "@types/jest": "^27.5.0",
-    "@types/node": "^16.7.13",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
-    "antd": "^5.4.2",
-    "axios": "^1.4.0",
-    "cypress": "^9.6.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "jest": "^28.0.3",
-    "prettier": "1.0.0",
+    "@reduxjs/toolkit": "^1.9.7",
+    "@types/react": "^18.2.74",
+    "@types/react-dom": "^18.2.23",
+    "@types/styled-components": "^5.1.34",
+    "antd": "^5.16.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-redux": "^8.0.5",
-    "react-router-dom": "^6.10.0",
+    "react-redux": "^8.1.3",
+    "react-router-dom": "^6.22.3",
     "react-scripts": "5.0.1",
     "redux": "^4.2.1",
     "redux-saga": "^1.2.3",
-    "sass": "^1.62.1",
-    "styled-components": "^5.3.11",
-    "typescript": "^4.4.2",
-    "web-vitals": "^2.1.0"
+    "styled-components": "^6.1.8",
+    "typescript": "^4.9.5",
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "lint": "eslint ./src --ext .ts,.tsx && prettier --check ./src"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "prettier"
     ]
   },
   "browserslist": {
@@ -52,5 +43,16 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^28.1.8",
+    "@types/node": "^16.18.93",
+    "eslint-config-prettier": "^9.1.0",
+    "cypress": "^9.7.0",
+    "jest": "^28.1.3",
+    "prettier": "^2.8.8"
   }
 }
