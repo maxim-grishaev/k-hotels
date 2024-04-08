@@ -1,34 +1,39 @@
-import { Flex } from "antd"
+import { Alert, Flex } from "antd"
 import { styled } from "styled-components"
-import { useUpdatePolicyOfNoShow } from "../hooks/useUpdatePolicyOf"
-import { PolicyOfNoShow } from "../Store/venue/fetchData"
+import { usePolicyOfNoShow } from "../hooks/usePolicyOf"
 import { Gray } from "./atoms"
 import { PolicyAmountInput } from "./PolicyAmountInput"
 
 export const RowForPolicyOfNoShow = ({
   propertyId,
-  policy,
+  policyId,
   currency,
 }: {
   propertyId: string
-  policy: PolicyOfNoShow
+  policyId: string
   currency: string
 }) => {
-  const onPolicyChange = useUpdatePolicyOfNoShow({
-    propertyId,
-    policyId: policy.id,
-  })
+  const pol = usePolicyOfNoShow({ propertyId, policyId })
+  if (!pol.policy) {
+    return (
+      <Alert
+        type="warning"
+        message={`Policy with id ${policyId} is not found`}
+      />
+    )
+  }
+
   return (
     <Flex justify="space-between" gap="20px">
       <Flex vertical gap="5px">
-        <strong>{policy.name}</strong>
-        <Gray>{policy.description}</Gray>
+        <strong>{pol.policy.name}</strong>
+        <Gray>{pol.policy.description}</Gray>
       </Flex>
       <PolicyVal>
         <PolicyAmountInput
           name="Cost"
-          policy={policy}
-          onChange={(v) => onPolicyChange({ amount: v })}
+          policy={pol.policy}
+          onChange={(v) => pol.update({ amount: v })}
           currency={currency}
         />
       </PolicyVal>

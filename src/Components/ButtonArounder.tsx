@@ -1,5 +1,11 @@
 import styled from "styled-components"
 
+/*
+This Button isn/t really used anywhara and is kept meinly for the illustration purposes.
+It doent't fit the design of the app.
+But I kept it here to show how styled-components can be used instead of plain CSS.
+*/
+
 export const ButtonArounder = ({
   children,
   onClick,

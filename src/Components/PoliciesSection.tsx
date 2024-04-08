@@ -1,46 +1,37 @@
 import { styled } from "styled-components"
+import { usePoliciesOverview } from "../hooks/usePoliciesOverview"
 import { ASectionWithTitle } from "./ASectionWithTitile"
-import { PolicyOfCancellation, PolicyOfNoShow } from "../Store/venue/fetchData"
 import { RowForPolicyOfCancellation } from "./RowForPolicyOfCancellation"
 import { RowForPolicyOfNoShow } from "./RowForPolicyOfNoShow"
 
-export const PoliciesSection = ({
-  propertyId,
-  currency,
-  noShowPolicies,
-  cancellationPolicies,
-}: {
-  propertyId: string
-  noShowPolicies: PolicyOfNoShow[]
-  cancellationPolicies: PolicyOfCancellation[]
-  currency: string
-}) => {
+export const PoliciesSection = ({ propertyId }: { propertyId: string }) => {
+  const pov = usePoliciesOverview(propertyId)
   return (
     <>
       <ASectionWithTitle title="No show">
-        {noShowPolicies.map((it) => (
-          <Item key={it.id}>
+        {pov.noShow.map((id) => (
+          <Item key={id}>
             <RowForPolicyOfNoShow
               propertyId={propertyId}
-              policy={it}
-              currency={currency}
+              policyId={id}
+              currency={pov.currency}
             />
           </Item>
         ))}
-        {noShowPolicies.length === 0 && <p>None</p>}
+        {pov.noShow.length === 0 && <p>None</p>}
       </ASectionWithTitle>
 
       <ASectionWithTitle title="Cancellation">
-        {cancellationPolicies.map((it) => (
-          <Item key={it.id}>
+        {pov.cancellation.map((id) => (
+          <Item key={id}>
             <RowForPolicyOfCancellation
               propertyId={propertyId}
-              policy={it}
-              currency={currency}
+              policyId={id}
+              currency={pov.currency}
             />
           </Item>
         ))}
-        {cancellationPolicies.length === 0 && <p>None</p>}
+        {pov.cancellation.length === 0 && <p>None</p>}
       </ASectionWithTitle>
     </>
   )

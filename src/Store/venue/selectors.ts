@@ -1,4 +1,6 @@
-import { venueAdapter, VenueState } from "./venueSlice"
+import { venueAdapter } from "./venueAdapter"
+import { Venue } from "./fetchData"
+import { VenueState } from "./venueSlice"
 
 const selectAdapterBranch = (state: VenueState) => state.venues
 
@@ -13,26 +15,36 @@ export const selectOneProperty = (state: VenueState, propertyId: string) => {
   return venue ? venue.property : undefined
 }
 
-export const selectOneNoSHowPolicy = (
+export const selectOnePolicyOfNoShow = (
   state: VenueState,
   propertyId: string,
   policyId: string,
 ) => {
   const venue = selectOneVenue(state, propertyId)
-  if (venue === undefined) {
-    return undefined
-  }
-  return venue.policies.noShowPolicies.find((p) => p.id === policyId)
+  return pickOnePolicyOfNoShow(venue, policyId)
 }
 
-export const selectOneCancellationPolicy = (
+export const selectOnePolicyOfCancellation = (
   state: VenueState,
   propertyId: string,
   policyId: string,
 ) => {
   const venue = selectOneVenue(state, propertyId)
-  if (venue === undefined) {
-    return undefined
-  }
-  return venue.policies.cancellationPolicies.find((p) => p.id === policyId)
+  return pickOnePolicyOfCancellation(venue, policyId)
 }
+
+export const pickOnePolicyOfNoShow = (
+  venue: Venue | undefined,
+  policyId: string,
+) =>
+  !venue
+    ? undefined
+    : venue.policies.noShowPolicies.find((p) => p.id === policyId)
+
+export const pickOnePolicyOfCancellation = (
+  venue: Venue | undefined,
+  policyId: string,
+) =>
+  !venue
+    ? undefined
+    : venue.policies.cancellationPolicies.find((p) => p.id === policyId)

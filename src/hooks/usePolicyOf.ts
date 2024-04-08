@@ -1,9 +1,15 @@
 import { useCallback } from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { selectVenueBranch } from "../Store/selectors"
 import { PolicyOfCancellation, PolicyOfNoShow } from "../Store/venue/fetchData"
 import { venueSlice } from "../Store/venue/venueSlice"
+import {
+  selectOnePolicyOfCancellation,
+  selectOnePolicyOfNoShow,
+} from "../Store/venue/selectors"
+import { RootState } from "../Store/store"
 
-export const useUpdatePolicyOfCancellation = ({
+export const usePolicyOfCancellation = ({
   propertyId,
   policyId,
 }: {
@@ -12,7 +18,15 @@ export const useUpdatePolicyOfCancellation = ({
 }) => {
   const dispatch = useDispatch()
 
-  return useCallback(
+  const policy = useSelector((root: RootState) =>
+    selectOnePolicyOfCancellation(
+      selectVenueBranch(root),
+      propertyId,
+      policyId,
+    ),
+  )
+
+  const update = useCallback(
     (data: Partial<Omit<PolicyOfCancellation, "id">>) => {
       dispatch(
         venueSlice.actions.updateCancellationPolicy({
@@ -24,9 +38,11 @@ export const useUpdatePolicyOfCancellation = ({
     },
     [propertyId, policyId, dispatch],
   )
+
+  return { update, policy }
 }
 
-export const useUpdatePolicyOfNoShow = ({
+export const usePolicyOfNoShow = ({
   propertyId,
   policyId,
 }: {
@@ -35,7 +51,11 @@ export const useUpdatePolicyOfNoShow = ({
 }) => {
   const dispatch = useDispatch()
 
-  return useCallback(
+  const policy = useSelector((root: RootState) =>
+    selectOnePolicyOfNoShow(selectVenueBranch(root), propertyId, policyId),
+  )
+
+  const update = useCallback(
     (data: Partial<Omit<PolicyOfNoShow, "id">>) => {
       dispatch(
         venueSlice.actions.updateNoSHowPolicy({ propertyId, policyId, data }),
@@ -43,4 +63,6 @@ export const useUpdatePolicyOfNoShow = ({
     },
     [propertyId, policyId, dispatch],
   )
+
+  return { update, policy }
 }

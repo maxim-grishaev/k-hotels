@@ -1,52 +1,91 @@
-import { Button, Flex, Select, Tag } from "antd"
+import { Alert, Button, Flex, Select, Tag } from "antd"
 import { styled } from "styled-components"
-import { usePolicyEditor } from "../hooks/usePolicyEditor"
+import { useEditorState } from "../hooks/useEditorState"
 import { refL10nMap } from "../lib/l10n"
 import { PolicyOfCancellation, Reference } from "../Store/venue/fetchData"
 import { Gray } from "./atoms"
 import { AmountInput } from "./AmountInput"
 import { PolicyAmountInput } from "./PolicyAmountInput"
+import { usePolicyOfCancellation } from "../hooks/usePolicyOf"
 
 export const RowForPolicyOfCancellation = ({
   propertyId,
-  policy,
+  policyId,
   currency,
 }: {
   propertyId: string
-  policy: PolicyOfCancellation
+  policyId: string
   currency: string
 }) => {
-  const pe = usePolicyEditor({ propertyId, policy })
-  return pe.isEditing ? (
-    <PolicyRow
-      name={policy.name}
-      description={policy.description}
-      actions={
-        <>
-          <Button aria-label="Reset" onClick={pe.reset} type="link">
-            Reset
-          </Button>
-          <Button aria-label="Save" onClick={pe.save} type="primary">
-            Save
-          </Button>
-        </>
-      }
-    >
-      <PolicyRowCancellationEditUI
-        policy={pe.editedPolicy}
-        currency={currency}
-        onChangeAmount={(a) => pe.onChange({ amount: a })}
-        onChangeDays={(d) => pe.onChange({ days: d })}
-        onChangeHours={(h) => pe.onChange({ hours: h })}
-        onChangeRef={(r) => pe.onChange({ reference: r })}
+  const policy = usePolicyOfCancellation({ propertyId, policyId })
+  if (!policy.policy) {
+    return (
+      <Alert
+        type="warning"
+        message={`Policy with id ${policyId} is not found`}
       />
-    </PolicyRow>
+    )
+  }
+  return (
+    <RowForPolicyOfCancellationUI
+      policy={policy.policy}
+      currency={currency}
+      onSave={policy.update}
+    />
+  )
+}
+
+export const RowForPolicyOfCancellationUI = ({
+  policy,
+  currency,
+  onSave,
+}: {
+  policy: PolicyOfCancellation
+  currency: string
+  onSave: (policy: PolicyOfCancellation) => void
+}) => {
+  const edit = useEditorState(policy, onSave)
+  return edit.isEditing ? (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        edit.save()
+      }}
+      onReset={(e) => {
+        e.preventDefault()
+        edit.reset()
+      }}
+    >
+      <PolicyRow
+        name={policy.name}
+        description={policy.description}
+        actions={
+          <>
+            <Button aria-label="Reset" type="link" htmlType="reset">
+              Reset
+            </Button>
+            <Button aria-label="Save" type="primary" htmlType="submit">
+              Save
+            </Button>
+          </>
+        }
+      >
+        <PolicyRowCancellationEditUI
+          policy={edit.editedData}
+          currency={currency}
+          onChangeAmount={(a) => edit.onChange({ amount: a })}
+          onChangeDays={(d) => edit.onChange({ days: d })}
+          onChangeHours={(h) => edit.onChange({ hours: h })}
+          onChangeRef={(r) => edit.onChange({ reference: r })}
+        />
+      </PolicyRow>
+    </form>
   ) : (
     <PolicyRow
       name={policy.name}
       description={policy.description}
       actions={
-        <Button aria-label="Edit" onClick={pe.edit} type="text">
+        <Button aria-label="Edit" onClick={edit.edit} type="text">
           Edit
         </Button>
       }
