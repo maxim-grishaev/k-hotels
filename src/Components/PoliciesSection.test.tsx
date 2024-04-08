@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom/extend-expect"
 import { render, screen } from "@testing-library/react"
-import { createTestStoreWrapper } from "../Store/createTestStoreWrapper"
+import { createTestStoreProvider } from "../Store/createTestStoreProvider"
 import {
   createPolicyNoShow,
   createPolicyCancellation,
@@ -27,7 +27,7 @@ describe("PoliciesSection", () => {
         noShowPolicies={[createPolicyNoShow("NS")]}
         cancellationPolicies={[]}
       />,
-      { wrapper: createTestStoreWrapper() },
+      { wrapper: createTestStoreProvider() },
     )
     expect(screen.getByText("name NS")).toBeInTheDocument()
   })
@@ -40,7 +40,7 @@ describe("PoliciesSection", () => {
         noShowPolicies={[]}
         cancellationPolicies={[createPolicyCancellation("CC")]}
       />,
-      { wrapper: createTestStoreWrapper() },
+      { wrapper: createTestStoreProvider() },
     )
     expect(screen.getByText("name CC")).toBeInTheDocument()
   })

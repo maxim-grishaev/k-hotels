@@ -1,5 +1,5 @@
 import { act, renderHook } from "@testing-library/react"
-import { createTestStoreWrapper } from "../Store/createTestStoreWrapper"
+import { createTestStoreProvider } from "../Store/createTestStoreProvider"
 import { createStore } from "../Store/store"
 import { populateVenue } from "../Store/venue/mock"
 import {
@@ -36,7 +36,7 @@ describe("should update policy", () => {
           propertyId,
           policyId: policyNoShowId,
         }),
-      { wrapper: createTestStoreWrapper(store) },
+      { wrapper: createTestStoreProvider(store) },
     )
 
     expect(view.result.current).toEqual(expect.any(Function))
@@ -60,7 +60,7 @@ describe("should update policy", () => {
           propertyId,
           policyId: policyCancellationId,
         }),
-      { wrapper: createTestStoreWrapper(store) },
+      { wrapper: createTestStoreProvider(store) },
     )
 
     expect(view.result.current).toEqual(expect.any(Function))

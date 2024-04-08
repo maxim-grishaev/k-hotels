@@ -1,5 +1,5 @@
 import { renderHook } from "@testing-library/react"
-import { createTestStoreWrapper } from "../Store/createTestStoreWrapper"
+import { createTestStoreProvider } from "../Store/createTestStoreProvider"
 import { createStore } from "../Store/store"
 import * as api from "../Store/venue/fetchData"
 import { venueSlice } from "../Store/venue/venueSlice"
@@ -14,7 +14,7 @@ describe("useVenuesFetcher", () => {
     const store = createStore()
     const mockDispatch = jest.spyOn(store, "dispatch")
     renderHook(() => useVenuesFetcher(), {
-      wrapper: createTestStoreWrapper(store),
+      wrapper: createTestStoreProvider(store),
     })
     expect(mockDispatch).toHaveBeenCalledWith({
       type: venueSlice.actions.requestStart.type,

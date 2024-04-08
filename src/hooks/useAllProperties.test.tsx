@@ -1,5 +1,5 @@
 import { renderHook } from "@testing-library/react"
-import { createTestStoreWrapper } from "../Store/createTestStoreWrapper"
+import { createTestStoreProvider } from "../Store/createTestStoreProvider"
 import { createStore } from "../Store/store"
 import { populateVenue } from "../Store/venue/mock"
 import { venueSlice } from "../Store/venue/venueSlice"
@@ -9,7 +9,7 @@ describe("useAllProperties", () => {
   it("should return empty array if not populated", () => {
     const store = createStore()
     const view = renderHook(() => useAllProperties(), {
-      wrapper: createTestStoreWrapper(store),
+      wrapper: createTestStoreProvider(store),
     })
     expect(view.result.current).toEqual([])
   })
@@ -29,7 +29,7 @@ describe("useAllProperties", () => {
     store.dispatch(venueSlice.actions.success([v1, v2]))
 
     const view = renderHook(() => useAllProperties(), {
-      wrapper: createTestStoreWrapper(store),
+      wrapper: createTestStoreProvider(store),
     })
     expect(view.result.current.map((v) => v.id)).toEqual(["pId_1", "pId_2"])
   })

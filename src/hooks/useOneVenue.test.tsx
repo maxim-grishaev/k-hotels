@@ -1,5 +1,5 @@
 import { renderHook } from "@testing-library/react"
-import { createTestStoreWrapper } from "../Store/createTestStoreWrapper"
+import { createTestStoreProvider } from "../Store/createTestStoreProvider"
 import { createStore } from "../Store/store"
 import { populateVenue } from "../Store/venue/mock"
 import { venueSlice } from "../Store/venue/venueSlice"
@@ -8,7 +8,7 @@ import { useOneVenue } from "./useOneVenue"
 describe("useOneVenue", () => {
   it("should return undefined if item does not exist", () => {
     const view = renderHook(() => useOneVenue("1"), {
-      wrapper: createTestStoreWrapper(),
+      wrapper: createTestStoreProvider(),
     })
     expect(view.result.current).toBeUndefined()
   })
@@ -29,7 +29,7 @@ describe("useOneVenue", () => {
     store.dispatch(venueSlice.actions.success([v1, v2]))
 
     const view = renderHook(() => useOneVenue("p-good"), {
-      wrapper: createTestStoreWrapper(store),
+      wrapper: createTestStoreProvider(store),
     })
     expect(view.result.current?.property.name).toEqual("found me!")
   })

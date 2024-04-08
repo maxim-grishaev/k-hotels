@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom/extend-expect"
 import { fireEvent, render, screen } from "@testing-library/react"
-import { createTestStoreWrapper } from "../Store/createTestStoreWrapper"
+import { createTestStoreProvider } from "../Store/createTestStoreProvider"
 import { createStore } from "../Store/store"
 import { createPolicyCancellation } from "../Store/venue/mock"
 import { venueSlice } from "../Store/venue/venueSlice"
@@ -11,7 +11,7 @@ describe("RowForPolicyOfCancellation", () => {
     const pol = createPolicyCancellation("1")
     render(
       <RowForPolicyOfNoShow propertyId="1" policy={pol} currency="USD" />,
-      { wrapper: createTestStoreWrapper() },
+      { wrapper: createTestStoreProvider() },
     )
     expect(screen.getByText(pol.name)).toBeInTheDocument()
     expect(screen.getByText(pol.description)).toBeInTheDocument()
@@ -24,7 +24,7 @@ describe("RowForPolicyOfCancellation", () => {
     const pol = createPolicyCancellation("1")
     const view = render(
       <RowForPolicyOfNoShow propertyId="1" policy={pol} currency="USD" />,
-      { wrapper: createTestStoreWrapper(store) },
+      { wrapper: createTestStoreProvider(store) },
     )
 
     const costInput = screen.getByRole("spinbutton", { name: "Cost" })

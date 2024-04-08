@@ -1,5 +1,5 @@
 import { act, renderHook } from "@testing-library/react"
-import { createTestStoreWrapper } from "../Store/createTestStoreWrapper"
+import { createTestStoreProvider } from "../Store/createTestStoreProvider"
 import { createStore } from "../Store/store"
 import {
   createPolicyCancellation,
@@ -21,7 +21,7 @@ describe("usePolicyEditor", () => {
 
     const view = renderHook(
       () => usePolicyEditor({ propertyId: "1", policy: pol }),
-      { wrapper: createTestStoreWrapper(store) },
+      { wrapper: createTestStoreProvider(store) },
     )
 
     expect(view.result.current.isEditing).toBe(false)

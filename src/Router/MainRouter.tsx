@@ -1,16 +1,15 @@
 import { BrowserRouter, Route, Routes, useParams } from "react-router-dom"
 import { useVenuesFetcher } from "../hooks/useVenuesFetcher"
 import { useSelector } from "react-redux"
-import { RootState } from "../Store/store"
 import { LoadingPage } from "../Pages/LoadingPage"
 import { NotFoundPage } from "../Pages/NotFoundPage"
 import { VenuesListPage } from "../Pages/VenuesListPage"
 import { VenuePage } from "../Pages/VenuePage"
+import { selectVenuesLoadingState } from "../Store/selectors"
 
-const getLoadingState = (state: RootState) => state.venues.loading
 export const MainRouter = () => {
   useVenuesFetcher()
-  const isLoading = useSelector(getLoadingState)
+  const isLoading = useSelector(selectVenuesLoadingState)
   return (
     <BrowserRouter>
       <Routes>

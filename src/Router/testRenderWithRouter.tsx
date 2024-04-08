@@ -1,6 +1,6 @@
 import { act, render } from "@testing-library/react"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
-import { createTestStoreWrapper } from "../Store/createTestStoreWrapper"
+import { createTestStoreProvider } from "../Store/createTestStoreProvider"
 import { AppStore } from "../Store/store"
 
 const Noop = ({ children }: { children: React.ReactNode }) => <>{children}</>
@@ -12,7 +12,7 @@ export const testRenderWithRouter = async (
     store?: AppStore
   } = {},
 ) => {
-  const StoreProv = opts.store ? createTestStoreWrapper(opts.store) : Noop
+  const StoreProv = opts.store ? createTestStoreProvider(opts.store) : Noop
   return await act(async () => {
     render(ui, {
       wrapper: ({ children }) => (
