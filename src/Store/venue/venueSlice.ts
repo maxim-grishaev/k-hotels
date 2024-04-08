@@ -18,14 +18,16 @@ export const venueSlice = createSlice({
     requestStart: (state) => {
       state.loading = true
     },
+    // TODO: naming is a little bit confusing as it's not clear if we add or replace items
     success: (state, action: PayloadAction<Venue[]>) => {
       venueAdapter.addMany(state.venues, action.payload)
       state.loading = false
     },
-    error: (state, action) => {
+    error: (state, action: PayloadAction<unknown>) => {
       state.error = String(action.payload)
       state.loading = false
     },
+
     updateNoSHowPolicy: (
       state,
       action: PayloadAction<{
@@ -39,6 +41,8 @@ export const venueSlice = createSlice({
         console.error("[updateNoSHowPolicy] id is not allowed to be changed")
         return
       }
+      // Can't use selectOnePolicyOfNoShow here because it's not draft-safe
+      // We need policy as mutative version to be able to use Object.assign
       const venue = state.venues.entities[propertyId]
       const policy = pickOnePolicyOfNoShow(venue, policyId)
       if (policy) {
@@ -55,32 +59,13 @@ export const venueSlice = createSlice({
       }>,
     ) => {
       const { policyId, propertyId, data } = action.payload
+      // Can't use selectOnePolicyOfCancellation here because it's not draft-safe
+      // We need policy as mutative version to be able to use Object.assign
       const venue = state.venues.entities[propertyId]
       const policy = pickOnePolicyOfCancellation(venue, policyId)
       if (policy) {
         Object.assign(policy, data)
       }
-    },
-    setPolicyValue: (
-      state,
-      action: PayloadAction<{
-        propertyId: string
-        policyId: string
-        amount: number
-      }>,
-    ) => {
-      const { amount, policyId, propertyId } = action.payload
-      const venue = state.venues.entities[propertyId]
-      if (!venue) {
-        return
-      }
-      const policy = venue.policies.noShowPolicies
-        .concat(venue.policies.cancellationPolicies)
-        .find((p) => p.id === policyId)
-      if (!policy) {
-        return
-      }
-      policy.amount = amount
     },
   },
 })

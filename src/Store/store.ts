@@ -9,7 +9,8 @@ export const createStore = () => {
   const store = configureStore({
     middleware: [sagaMiddleware],
     reducer: {
-      // For testing
+      // May help for investigartion and testing,
+      // but should not be in production since it's basically a "legalised" memory leak.
       // history: createReducer([] as AnyAction[], (builder) =>
       //   builder.addDefaultCase((state, action: AnyAction) =>
       //     state.concat(action),

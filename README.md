@@ -18,6 +18,7 @@ In the data.json file under `/Store`, you can see that the properties have a "po
 ```
 
 ### What we would like to see:
+
 - Type safety.
 - Aim for consistency.
 - UX improvements, especially about data display. We would appreciate seeing a visual way to understand the data easily. We expect our frontend engineers to have some UX eye and share their input.
@@ -27,27 +28,33 @@ In the data.json file under `/Store`, you can see that the properties have a "po
 ### Katanox values & how it applies to this technical assessment
 
 #### Respect other's time
+
 We are mindful of our colleagues' time and allow them to focus by thinking whether a meeting can be converted to an async conversation. This also applies to our technical work.
+
 - Readable code.
 - Comments to clarify anything ambiguous.
 - Instructions on how to build and run the code.
 
 #### Data beats excitement
+
 - Document any technical decision you consider providing your reasons.
 - Add testing.
 
 #### See it, own it
+
 When we see something that is not working as expected, we don't turn around. We fix it or report it.
+
 - Refactor the "legacy code" that can be improved.
 - If some of the refactoring increase the scope too much, document the painful points. Feel free to suggest possible solutions.
 - Simple, elegant code.
 - Nice, clean architecture.
 
 #### Get on a call
+
 If you need anything from us, feel free to write us, and if it is necessary, we will love to jump on a call. Getting on a call tends to solve our issues/disagreements and moves the needle quicker.
 
-
 ## Submission
+
 First, push the initial repository to the master branch. Then, develop your solution in a different branch and, once ready, create a pull request to the master branch. This way, it will be easier for us to spot all the changes you've made. Finally, send an invitation to the repository by email and assign us to the PR. If uploaded to GitHub, invite `@KatanoxDevelopers`.
 
 # Getting Started with Create React App
@@ -60,9 +67,20 @@ In the project directory, you can run:
 
 ### `yarn start`
 
-Runs the app in the development mode.\
+Runs the app in the development mode.
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
 ### `yarn build`
 
-Builds the app for production to the `build` folder.\
+Builds the app for production to the `build` folder.
 It correctly bundles React in production mode and optimizes the build for the best performance.
+
+## `yarn test`
+
+Launches the test runner in the interactive watch mode.
+With CI=1 it runs in normal mode, so same command used in CI.
+
+## `yarn lint` / `yarn fmt`
+
+Runs the linter to check for any linting errors.
+`fmt` also applies autofixes and formats the code with prettier.
