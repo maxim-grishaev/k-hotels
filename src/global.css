@@ -5,9 +5,26 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-weight: 300;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+h1 {
+  margin: 20px 0 10px;
+  font-weight: 300;
+  font-size: 36px;
+}
+
+strong {
+  font-weight: 500;
+}
+
+a:focus-visible {
+  outline: 3px solid #91caff;
+  outline-offset: 3px;
+  border-radius: 2px;
 }

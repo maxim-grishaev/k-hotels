@@ -1,20 +1,16 @@
 import { Menu } from "antd"
-import { useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
+import { getAllPropertiesURL } from "../lib/nav"
 
-export const Navbar = (props: { isHome: boolean }) => {
-  const navigate = useNavigate()
-  const onClick = () => {
-    navigate("/")
-  }
+export const Navbar = (props: { disableHomeLink: boolean }) => {
   return (
     <Menu
-      onClick={onClick}
       mode="horizontal"
       items={[
         {
-          label: "Properties",
+          label: <Link to={getAllPropertiesURL()}>Properties</Link>,
           key: "properties",
-          disabled: props.isHome,
+          disabled: props.disableHomeLink,
         },
       ]}
     />

@@ -1,42 +1,42 @@
-import { Button, Image, Table } from "antd"
-import { DataProperty } from "../Store/property/service"
-import Column from "antd/es/table/Column"
+import { Button, Table } from "antd"
+import { Property } from "../Store/venue/fetchData"
 import { Link } from "react-router-dom"
 import { getPropertyURL } from "../lib/nav"
+import { ImgPreviewItem } from "./ImgPreview"
+import { getPropertyAddress } from "../lib/getAddress"
+import { Gray } from "./atoms"
 
-export const PropertiesTable = ({
-  properties,
-}: {
-  properties: DataProperty[]
-}) => (
+export const PropertiesTable = ({ properties }: { properties: Property[] }) => (
   <Table
     dataSource={properties.map((p) => ({
       id: p.id,
-      image: <ImgCell image={p.images[0]} alt={p.name} />,
+      image: <ImgCell item={p} />,
       name: <NameCell item={p} />,
+      address: getPropertyAddress(p),
       action: <ActionsCell id={p.id} />,
     }))}
     rowKey="id"
   >
-    <Column dataIndex="image" title="Image" key="image" width={120} />
-    <Column dataIndex="name" title="Name" key="name" />
-    <Column dataIndex="id" title="Id" key="id" width={1} />
-    <Column dataIndex="action" title="Actions" key="actions" width={1} />
+    <Table.Column dataIndex="image" title="" key="image" width={120} />
+    <Table.Column dataIndex="name" title="Name" key="name" />
+    <Table.Column dataIndex="address" title="Address" key="address" />
+    <Table.Column dataIndex="id" title="ID" key="id" width={1} />
+    <Table.Column dataIndex="action" title="" key="actions" width={1} />
   </Table>
 )
 
-const NameCell = ({ item }: { item: DataProperty }) => (
-  <Link to={getPropertyURL(item.id)}>{item.name}</Link>
-)
+const ImgCell = ({ item }: { item: Property }) =>
+  item.images.length > 0 ? (
+    <ImgPreviewItem image={item.images[0]} alt={item.name} />
+  ) : null
 
-const ImgCell = ({
-  image,
-  alt,
-}: {
-  image?: DataProperty["images"][number]
-  alt: string
-}) =>
-  image !== undefined ? <Image src={image.url} width={100} alt={alt} /> : null
+const NameCell = ({ item }: { item: Property }) => (
+  <p>
+    <Link to={getPropertyURL(item.id)}>{item.name}</Link>
+    <br />
+    <Gray>{item.description}</Gray>
+  </p>
+)
 
 const ActionsCell = ({ id }: { id: string }) => (
   <Link to={getPropertyURL(id)}>
