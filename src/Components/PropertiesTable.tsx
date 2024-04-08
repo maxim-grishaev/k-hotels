@@ -1,0 +1,45 @@
+import { Button, Image, Table } from "antd"
+import { DataProperty } from "../Store/property/service"
+import Column from "antd/es/table/Column"
+import { Link } from "react-router-dom"
+import { getPropertyURL } from "../lib/nav"
+
+export const PropertiesTable = ({
+  properties,
+}: {
+  properties: DataProperty[]
+}) => (
+  <Table
+    dataSource={properties.map((p) => ({
+      id: p.id,
+      image: <ImgCell image={p.images[0]} alt={p.name} />,
+      name: <NameCell item={p} />,
+      action: <ActionsCell id={p.id} />,
+    }))}
+    rowKey="id"
+  >
+    <Column dataIndex="image" title="Image" key="image" width={120} />
+    <Column dataIndex="name" title="Name" key="name" />
+    <Column dataIndex="id" title="Id" key="id" width={1} />
+    <Column dataIndex="action" title="Actions" key="actions" width={1} />
+  </Table>
+)
+
+const NameCell = ({ item }: { item: DataProperty }) => (
+  <Link to={getPropertyURL(item.id)}>{item.name}</Link>
+)
+
+const ImgCell = ({
+  image,
+  alt,
+}: {
+  image?: DataProperty["images"][number]
+  alt: string
+}) =>
+  image !== undefined ? <Image src={image.url} width={100} alt={alt} /> : null
+
+const ActionsCell = ({ id }: { id: string }) => (
+  <Link to={getPropertyURL(id)}>
+    <Button size="small">Open</Button>
+  </Link>
+)
